@@ -3,7 +3,10 @@ import { BookOpen } from "lucide-react"
 
 export function OurStory() {
   return (
-    <section className="border-b border-border bg-muted/15 py-16 sm:py-24">
+    <section
+      id="our-story"
+      className="scroll-mt-16 border-b border-border bg-muted/15 py-16 sm:py-24"
+    >
       <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl border border-border shadow-xl sm:aspect-16/10 lg:aspect-4/3">

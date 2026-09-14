@@ -16,7 +16,7 @@ const STATIC_USER: AuthUser = {
 }
 
 export function useAuth(): AuthState {
-  const isLoggedIn = true
+  const isLoggedIn = false
 
   const logout = () => {
     // Stub for future authentication integration

@@ -1,8 +1,5 @@
 import { Geist, Geist_Mono, DM_Sans } from "next/font/google"
-
 import "./globals.css"
-import { Navbar } from "@/components/navbar/navbar"
-import { Footer } from "@/components/footer/footer"
 import { cn } from "@/lib/utils"
 
 const dmSansHeading = DM_Sans({
@@ -11,6 +8,8 @@ const dmSansHeading = DM_Sans({
 })
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
+
+import { Toaster } from "@/components/ui/sonner"
 
 export default function RootLayout({
   children,
@@ -29,14 +28,9 @@ export default function RootLayout({
         dmSansHeading.variable
       )}
     >
-      <body>
-        <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
-          <Navbar />
-          <main className="mx-auto w-full max-w-[1920px] flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+      <body className="min-h-screen bg-background text-foreground">
+        {children}
+        <Toaster />
       </body>
     </html>
   )

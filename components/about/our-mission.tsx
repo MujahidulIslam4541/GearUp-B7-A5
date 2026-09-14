@@ -25,10 +25,11 @@ export function OurMission() {
             </h2>
 
             <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              GearUp aims to make quality sports and outdoor equipment accessible
-              to more people by providing a simple, convenient, and trustworthy
-              rental experience. We believe everyone deserves the thrill of the
-              great outdoors without financial or logistical hurdles.
+              GearUp aims to make quality sports and outdoor equipment
+              accessible to more people by providing a simple, convenient, and
+              trustworthy rental experience. We believe everyone deserves the
+              thrill of the great outdoors without financial or logistical
+              hurdles.
             </p>
 
             <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
@@ -57,4 +58,3 @@ export function OurMission() {
     </section>
   )
 }
-

@@ -80,4 +80,3 @@ export const ABOUT_STATS: StatItem[] = [
     description: "From verified outdoor athletes",
   },
 ]
-

@@ -6,7 +6,7 @@ export function AboutCta() {
   return (
     <section className="border-b border-border bg-muted/20 py-16 sm:py-24">
       <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-card via-card to-muted/40 p-8 shadow-xl sm:p-12 lg:p-16">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-linear-to-br from-card via-card to-muted/40 p-8 shadow-xl sm:p-12 lg:p-16">
           <div className="absolute -top-24 -right-24 size-72 rounded-full bg-primary/10 blur-3xl" />
           <div className="absolute -bottom-24 -left-24 size-72 rounded-full bg-primary/10 blur-3xl" />
 
@@ -15,8 +15,9 @@ export function AboutCta() {
               Your Next Adventure Starts Here.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Find the right gear, choose your dates, and get ready for your next
-              adventure. Join thousands of outdoor enthusiasts gearing up today.
+              Find the right gear, choose your dates, and get ready for your
+              next adventure. Join thousands of outdoor enthusiasts gearing up
+              today.
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -44,4 +45,3 @@ export function AboutCta() {
     </section>
   )
 }
-
