@@ -17,7 +17,7 @@ const STATIC_USER: AuthUser = {
 
 // Temporary auth state helper (to be replaced with real auth session / cookie)
 export function useAuth(): AuthState {
-  const isLoggedIn = false
+  const isLoggedIn = true
   const logout = () => {}
 
   return {
