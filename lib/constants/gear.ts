@@ -1,6 +1,18 @@
 import { GearItem } from "@/types/gear"
 
-export const FEATURED_GEAR: GearItem[] = [
+export const GEAR_CATEGORIES = [
+  "all",
+  "camping",
+  "hiking",
+  "cycling",
+  "water sports",
+  "climbing",
+  "fitness",
+] as const
+
+export type GearCategoryName = (typeof GEAR_CATEGORIES)[number]
+
+export const ALL_GEAR: GearItem[] = [
   {
     id: "efb3677e-08e9-4d67-a162-53496ee0b748",
     name: "Mountain Bike Helmet",
@@ -137,4 +149,278 @@ export const FEATURED_GEAR: GearItem[] = [
     provider: { name: "Alpine Gear Masters", email: "alpine@gmail.com" },
     category: { name: "climbing" },
   },
+  {
+    id: "c1110001-aa11-44bb-99cc-111122223333",
+    name: "Ultralight 2-Person Backpacking Tent",
+    description:
+      "Freestanding 3-season tent with dual vestibules, weighing only 1.4kg for fast trekking.",
+    price: "3200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1478860409698-8707f313ee8b?auto=format&fit=crop&w=800&q=80",
+    brand: "MSR",
+    quantity: 6,
+    createdAt: "2026-09-01T10:00:00.000Z",
+    updatedAt: "2026-09-01T10:00:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "CampCraft Outfitters", email: "campcraft@gmail.com" },
+    category: { name: "camping" },
+  },
+  {
+    id: "c2220002-bb22-44cc-99dd-222233334444",
+    name: "Gore-Tex Trail Running Shoes",
+    description:
+      "All-terrain rugged trail runners with Vibram outsoles for muddy conditions.",
+    price: "900",
+    imageUrl:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+    brand: "Salomon",
+    quantity: 14,
+    createdAt: "2026-09-02T11:00:00.000Z",
+    updatedAt: "2026-09-02T11:00:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "Trailblazer Hub", email: "trailblazer@gmail.com" },
+    category: { name: "hiking" },
+  },
+  {
+    id: "c3330003-cc33-44dd-99ee-333344445555",
+    name: "Gravel Adventure Bike",
+    description:
+      "Aluminum frame gravel grinder with hydraulic disc brakes and tubeless-ready tires.",
+    price: "3500",
+    imageUrl:
+      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
+    brand: "Cannondale",
+    quantity: 4,
+    createdAt: "2026-09-03T12:00:00.000Z",
+    updatedAt: "2026-09-03T12:00:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "8aab30b0-17b7-4f7f-9ea1-df2c6df27e51",
+    provider: { name: "Peak Adventures", email: "provider@gmail.com" },
+    category: { name: "cycling" },
+  },
+  {
+    id: "c4440004-dd44-44ee-99ff-444455556666",
+    name: "Sub-Zero Mummy Sleeping Bag",
+    description:
+      "800-fill water-resistant down sleeping bag rated down to -10°C with thermal draft collar.",
+    price: "1600",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=800&q=80",
+    brand: "The North Face",
+    quantity: 11,
+    createdAt: "2026-09-04T09:30:00.000Z",
+    updatedAt: "2026-09-04T09:30:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "CampCraft Outfitters", email: "campcraft@gmail.com" },
+    category: { name: "camping" },
+  },
+  {
+    id: "c5550005-ee55-44ff-99aa-555566667777",
+    name: "White Water Rafting Life Vest",
+    description:
+      "USCG Type III high-flotation PFD vest with adjustable side cinches and lash tab.",
+    price: "650",
+    imageUrl:
+      "https://images.unsplash.com/photo-1563299796-17596ed6b017?auto=format&fit=crop&w=800&q=80",
+    brand: "NRS",
+    quantity: 25,
+    createdAt: "2026-09-05T13:45:00.000Z",
+    updatedAt: "2026-09-05T13:45:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "2460b513-1e12-4a25-b179-67bc4409a804",
+    provider: { name: "RiverRun Rentals", email: "riverrun@gmail.com" },
+    category: { name: "water sports" },
+  },
+  {
+    id: "c6660006-ff66-44aa-99bb-666677778888",
+    name: "Dynamic Climbing Rope 60m",
+    description:
+      "9.8mm water-repellent dynamic single rope with middle mark for sport and trad climbs.",
+    price: "1500",
+    imageUrl:
+      "https://images.unsplash.com/photo-1601224748193-d34f2a6a0d33?auto=format&fit=crop&w=800&q=80",
+    brand: "Mammut",
+    quantity: 9,
+    createdAt: "2026-09-06T15:10:00.000Z",
+    updatedAt: "2026-09-06T15:10:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "8aab30b0-17b7-4f7f-9ea1-df2c6df27e51",
+    provider: { name: "Alpine Gear Masters", email: "alpine@gmail.com" },
+    category: { name: "climbing" },
+  },
+  {
+    id: "c7770007-aa77-44bb-99cc-777788889999",
+    name: "Kettlebell Conditioning Set",
+    description:
+      "Cast iron powder-coated kettlebell trio (12kg, 16kg, 20kg) with color-coded bands.",
+    price: "1900",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80",
+    brand: "Rogue",
+    quantity: 12,
+    createdAt: "2026-09-07T08:30:00.000Z",
+    updatedAt: "2026-09-07T08:30:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "f2c157f9-a449-43d6-b93f-724b23a76c8d",
+    provider: { name: "ProFit Equipment", email: "profit@gmail.com" },
+    category: { name: "fitness" },
+  },
+  {
+    id: "c8880008-bb88-44cc-99dd-888899990000",
+    name: "Portable Camp Stove & Cookset",
+    description:
+      "Compact dual-burner backpacking gas stove with hard-anodized pots and wind baffle.",
+    price: "1100",
+    imageUrl:
+      "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80",
+    brand: "Jetboil",
+    quantity: 16,
+    createdAt: "2026-09-08T10:00:00.000Z",
+    updatedAt: "2026-09-08T10:00:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "CampCraft Outfitters", email: "campcraft@gmail.com" },
+    category: { name: "camping" },
+  },
+  {
+    id: "c9990009-cc99-44dd-99ee-999900001111",
+    name: "Rechargeable LED Headlamp 800lm",
+    description:
+      "Waterproof IPX8 rechargeable headlamp with flood, spot, and red-light night modes.",
+    price: "450",
+    imageUrl:
+      "https://images.unsplash.com/photo-1508873696983-2df57046475a?auto=format&fit=crop&w=800&q=80",
+    brand: "Nitecore",
+    quantity: 22,
+    createdAt: "2026-09-09T14:15:00.000Z",
+    updatedAt: "2026-09-09T14:15:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "Trailblazer Hub", email: "trailblazer@gmail.com" },
+    category: { name: "hiking" },
+  },
+  {
+    id: "caa00010-ddaa-44ee-99ff-000011112222",
+    name: "Full Suspension Mountain Bike",
+    description:
+      "29-inch enduro mountain bike with 160mm travel Fox suspension and 1x12 drivetrain.",
+    price: "4800",
+    imageUrl:
+      "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?auto=format&fit=crop&w=800&q=80",
+    brand: "Specialized",
+    quantity: 3,
+    createdAt: "2026-09-10T11:20:00.000Z",
+    updatedAt: "2026-09-10T11:20:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "8aab30b0-17b7-4f7f-9ea1-df2c6df27e51",
+    provider: { name: "Peak Adventures", email: "provider@gmail.com" },
+    category: { name: "cycling" },
+  },
+  {
+    id: "cbb00011-eebb-44ff-99aa-111122223333",
+    name: "Climbing Crash Pad",
+    description:
+      "Triple-layer closed and open-cell bouldering drop pad with taco-fold hinge and handles.",
+    price: "1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80",
+    brand: "Organic Climbing",
+    quantity: 7,
+    createdAt: "2026-09-11T16:00:00.000Z",
+    updatedAt: "2026-09-11T16:00:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "8aab30b0-17b7-4f7f-9ea1-df2c6df27e51",
+    provider: { name: "Alpine Gear Masters", email: "alpine@gmail.com" },
+    category: { name: "climbing" },
+  },
+  {
+    id: "ccc00012-ffcc-44aa-99bb-222233334444",
+    name: "Snorkel & Fins Set",
+    description:
+      "Panoramic tempered glass mask with dry-top purge snorkel and adjustable open-heel fins.",
+    price: "700",
+    imageUrl:
+      "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?auto=format&fit=crop&w=800&q=80",
+    brand: "Cressi",
+    quantity: 18,
+    createdAt: "2026-09-12T09:40:00.000Z",
+    updatedAt: "2026-09-12T09:40:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "2460b513-1e12-4a25-b179-67bc4409a804",
+    provider: { name: "AquaGear Pro", email: "aquagear@gmail.com" },
+    category: { name: "water sports" },
+  },
+  {
+    id: "cdd00013-aadd-44bb-99cc-333344445555",
+    name: "Olympic Barbell & Bumper Plates",
+    description:
+      "20kg chrome barbell with 70kg Olympic rubber bumper plates and quick-release collars.",
+    price: "4200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=800&q=80",
+    brand: "Eleiko",
+    quantity: 5,
+    createdAt: "2026-09-13T10:15:00.000Z",
+    updatedAt: "2026-09-13T10:15:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "f2c157f9-a449-43d6-b93f-724b23a76c8d",
+    provider: { name: "ProFit Equipment", email: "profit@gmail.com" },
+    category: { name: "fitness" },
+  },
+  {
+    id: "cee00014-bbee-44cc-99dd-444455556666",
+    name: "Insulated Hard Cooler 45L",
+    description:
+      "Rotomolded adventure cooler with permafrost insulation keeping ice frozen for up to 5 days.",
+    price: "1750",
+    imageUrl:
+      "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=800&q=80",
+    brand: "YETI",
+    quantity: 8,
+    createdAt: "2026-09-14T07:20:00.000Z",
+    updatedAt: "2026-09-14T07:20:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "CampCraft Outfitters", email: "campcraft@gmail.com" },
+    category: { name: "camping" },
+  },
+  {
+    id: "cff00015-ccff-44dd-99ee-555566667777",
+    name: "GPS Trail Navigator & InReach",
+    description:
+      "Satellite communicator with interactive SOS, waypoint tracking, and topographic maps.",
+    price: "2100",
+    imageUrl:
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=800&q=80",
+    brand: "Garmin",
+    quantity: 6,
+    createdAt: "2026-09-14T08:50:00.000Z",
+    updatedAt: "2026-09-14T08:50:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "5586ac4a-fd85-4da8-bffa-06297ca88fd0",
+    provider: { name: "Trailblazer Hub", email: "trailblazer@gmail.com" },
+    category: { name: "hiking" },
+  },
+  {
+    id: "d0000016-dd00-44ee-99ff-666677778888",
+    name: "Cycling Commuter Pannier Bag Pair",
+    description:
+      "100% waterproof roll-top dual bicycle bags with QL2.1 quick-mount rack system.",
+    price: "800",
+    imageUrl:
+      "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?auto=format&fit=crop&w=800&q=80",
+    brand: "Ortlieb",
+    quantity: 13,
+    createdAt: "2026-09-14T09:10:00.000Z",
+    updatedAt: "2026-09-14T09:10:00.000Z",
+    providerId: "4c849a48-6cff-437c-a214-6bd62547c690",
+    categoryId: "8aab30b0-17b7-4f7f-9ea1-df2c6df27e51",
+    provider: { name: "Peak Adventures", email: "provider@gmail.com" },
+    category: { name: "cycling" },
+  },
 ]
+
+export const FEATURED_GEAR: GearItem[] = ALL_GEAR.slice(0, 8)

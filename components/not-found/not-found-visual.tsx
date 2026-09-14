@@ -18,7 +18,7 @@ export function NotFoundVisual() {
         </div>
 
         <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground shadow-xs">
-          <Compass className="size-3 animate-spin text-primary [animation-duration:8s]" />
+          <Compass className="size-3 animate-spin text-primary animation-duration-[8s]" />
           <span>Trail Marker 404</span>
         </div>
       </div>

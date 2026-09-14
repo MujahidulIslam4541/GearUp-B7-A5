@@ -18,7 +18,7 @@ export function OurStory() {
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-background/70 via-transparent to-transparent" />
             <div className="absolute right-4 bottom-4 left-4 rounded-2xl border border-border/40 bg-background/85 p-4 shadow-lg backdrop-blur-md">
               <p className="text-sm font-semibold text-foreground">
                 Born on the Trails
