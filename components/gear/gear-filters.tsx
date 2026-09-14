@@ -144,7 +144,7 @@ export function GearFilters(props: GearFilterProps) {
               )}
             </Button>
           </S.SheetTrigger>
-          <S.SheetContent side="left" className="w-[300px] p-6">
+          <S.SheetContent side="left" className="w-75 p-6">
             <S.SheetHeader className="p-0 text-left">
               <S.SheetTitle className="font-heading text-lg font-bold">
                 Filters
