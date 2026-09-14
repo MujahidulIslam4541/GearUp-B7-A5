@@ -1,8 +1,9 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ShieldCheck } from "lucide-react"
 import { GearItem } from "@/types/gear"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { GearCardImage } from "@/components/gear/gear-card-image"
 
 interface GearCardProps {
   gear: GearItem
@@ -13,12 +14,32 @@ export function GearCard({ gear }: GearCardProps) {
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-      <GearCardImage
-        imageUrl={gear.imageUrl}
-        name={gear.name}
-        categoryName={gear.category.name}
-        isAvailable={isAvailable}
-      />
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
+        <Image
+          src={gear.imageUrl}
+          alt={gear.name}
+          fill
+          unoptimized
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        <div className="absolute top-3 left-3 flex gap-1.5">
+          <Badge
+            variant="secondary"
+            className="bg-background/80 text-xs font-medium capitalize backdrop-blur-md"
+          >
+            {gear.category.name}
+          </Badge>
+        </div>
+        <div className="absolute top-3 right-3">
+          <Badge
+            variant={isAvailable ? "default" : "destructive"}
+            className="text-[11px] font-semibold tracking-wide uppercase"
+          >
+            {isAvailable ? "Available" : "Booked"}
+          </Badge>
+        </div>
+      </div>
 
       <div className="flex flex-1 flex-col justify-between gap-3 p-4">
         <div className="space-y-1">
