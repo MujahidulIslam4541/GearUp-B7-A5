@@ -46,4 +46,3 @@ export const WHY_CHOOSE_ITEMS: WhyChooseItem[] = [
     icon: RotateCcw,
   },
 ]
-
