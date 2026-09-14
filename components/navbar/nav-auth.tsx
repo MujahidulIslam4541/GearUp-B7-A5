@@ -4,7 +4,7 @@ import Link from "next/link"
 import { LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { NavUserMenu } from "@/components/navbar/nav-user-menu"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
 interface NavAuthProps {

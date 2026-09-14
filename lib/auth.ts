@@ -15,12 +15,10 @@ const STATIC_USER: AuthUser = {
   email: "alex.morgan@gearup.io",
 }
 
+// Temporary auth state helper (to be replaced with real auth session / cookie)
 export function useAuth(): AuthState {
   const isLoggedIn = false
-
-  const logout = () => {
-    // Stub for future authentication integration
-  }
+  const logout = () => {}
 
   return {
     isLoggedIn,

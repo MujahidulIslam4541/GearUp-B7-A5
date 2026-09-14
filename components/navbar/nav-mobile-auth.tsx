@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { LayoutDashboard, LogOut, LogIn } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/lib/auth"
 import {
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -39,12 +39,10 @@ export function NavMobileAuth({ onClose }: NavMobileAuthProps) {
             logout()
             onClose()
           }}
-          className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10"
+          className="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-sm font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
         >
-          <div className="flex w-full items-center gap-2.5">
-            <LogOut className="size-4" />
-            <span>Log Out</span>
-          </div>
+          <LogOut className="size-4" />
+          <span>Log Out</span>
         </DropdownMenuItem>
       </>
     )
@@ -55,7 +53,7 @@ export function NavMobileAuth({ onClose }: NavMobileAuthProps) {
       <Link
         href="/auth/login"
         onClick={onClose}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
+        className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-semibold text-primary"
       >
         <LogIn className="size-4" />
         <span>Sign In</span>

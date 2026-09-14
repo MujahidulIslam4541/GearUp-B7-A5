@@ -1,7 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { RoleToggle } from "@/components/auth/role-toggle"
 import { AuthInput } from "@/components/auth/auth-input"
@@ -9,7 +11,8 @@ import {
   TabPanels,
   TabPanel,
 } from "@/components/animate-ui/primitives/headless/tabs"
-import { useRegisterForm } from "@/hooks/use-register-form"
+import { registerAction } from "@/app/auth/register/actions"
+import type { RegisterFormData, UserRole } from "@/lib/validations/auth"
 
 const FIELDS = [
   { id: "name", label: "Full Name", placeholder: "e.g. Alex Morgan" },
@@ -33,16 +36,45 @@ const FIELDS = [
   },
 ] as const
 
+type FormFields = Omit<RegisterFormData, "role">
+
 export function RegisterForm() {
-  const {
-    role,
-    setRole,
-    formData,
-    errors,
-    isSubmitting,
-    handleChange,
-    handleSubmit,
-  } = useRegisterForm()
+  const [role, setRole] = useState<UserRole>("CUSTOMER")
+  const [formData, setFormData] = useState<FormFields>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof RegisterFormData, string>>
+  >({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (errors[name as keyof RegisterFormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrors({})
+    setIsSubmitting(true)
+
+    const res = await registerAction({ ...formData, role })
+    setIsSubmitting(false)
+
+    if (!res.success) {
+      if (res.errors) setErrors(res.errors)
+      toast.error(res.message)
+      return
+    }
+
+    toast.success(res.message)
+  }
 
   const renderFields = () =>
     FIELDS.map((f) => (

@@ -17,6 +17,8 @@ export const registerSchema = z
     path: ["confirmPassword"],
   })
 
+export type UserRole = "CUSTOMER" | "PROVIDER"
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 
 export const loginSchema = z.object({

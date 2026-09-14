@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { LayoutDashboard, LogOut, User as UserIcon } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/lib/auth"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ export function NavUserMenu() {
 
   const initials = user.name
     .split(" ")
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join("")
     .toUpperCase()
 
@@ -42,32 +42,30 @@ export function NavUserMenu() {
         sideOffset={8}
         className="z-50 w-56 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-lg outline-none"
       >
-        <DropdownMenuLabel className="px-2.5 py-2">
+        <DropdownMenuLabel className="px-3 py-2">
           <p className="truncate text-sm font-semibold text-foreground">
             {user.name}
           </p>
           <p className="truncate text-xs text-muted-foreground">{user.email}</p>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="my-1 h-px bg-border" />
-        <DropdownMenuHighlight className="rounded-lg bg-accent/50">
-          <DropdownMenuItem className="cursor-pointer rounded-lg px-2.5 py-2 text-sm font-medium outline-none">
+        <DropdownMenuSeparator className="-mx-1.5 my-1 bg-border" />
+        <DropdownMenuHighlight className="absolute inset-x-1.5 rounded-lg bg-muted/80">
+          <DropdownMenuItem className="cursor-pointer rounded-lg p-0">
             <Link
               href="/dashboard"
-              className="flex w-full items-center gap-2.5"
+              className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-medium text-foreground"
             >
               <LayoutDashboard className="size-4 text-muted-foreground" />
               <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuSeparator className="my-1 h-px bg-border" />
+          <DropdownMenuSeparator className="-mx-1.5 my-1 bg-border" />
           <DropdownMenuItem
             onClick={logout}
-            className="cursor-pointer rounded-lg px-2.5 py-2 text-sm font-medium text-destructive outline-none"
+            className="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-sm font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
           >
-            <div className="flex w-full items-center gap-2.5">
-              <LogOut className="size-4" />
-              <span>Log Out</span>
-            </div>
+            <LogOut className="size-4" />
+            <span>Log Out</span>
           </DropdownMenuItem>
         </DropdownMenuHighlight>
       </DropdownMenuContent>

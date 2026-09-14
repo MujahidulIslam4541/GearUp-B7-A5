@@ -1,14 +1,52 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { AuthInput } from "@/components/auth/auth-input"
-import { useLoginForm } from "@/hooks/use-login-form"
+import { loginAction } from "@/app/auth/login/actions"
+import type { LoginFormData } from "@/lib/validations/auth"
 
 export function LoginForm() {
-  const { formData, errors, isSubmitting, handleChange, handleSubmit } =
-    useLoginForm()
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+    rememberMe: false,
+  })
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof LoginFormData, string>>
+  >({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+    if (errors[name as keyof LoginFormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrors({})
+    setIsSubmitting(true)
+
+    const res = await loginAction(formData)
+    setIsSubmitting(false)
+
+    if (!res.success) {
+      if (res.errors) setErrors(res.errors)
+      toast.error(res.message)
+      return
+    }
+
+    toast.success(res.message)
+  }
 
   return (
     <div className="w-full max-w-md space-y-6">
