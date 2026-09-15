@@ -1,7 +1,9 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { LogOut } from "lucide-react"
 import { toast } from "sonner"
+import { logoutAction } from "@/app/auth/login/actions"
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -9,10 +11,13 @@ import {
 } from "@/components/animate-ui/components/radix/sidebar"
 
 export function SidebarUserFooter() {
-  const handleLogout = () => {
-    toast.success("Demo session ended. Redirecting...", {
-      description: "In production, this clears your JWT auth tokens.",
-    })
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await logoutAction()
+    toast.success("Logged out successfully")
+    router.push("/auth/login")
+    router.refresh()
   }
 
   return (

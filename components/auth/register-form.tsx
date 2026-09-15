@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -14,31 +15,10 @@ import {
 import { registerAction } from "@/app/auth/register/actions"
 import type { RegisterFormData, UserRole } from "@/lib/validations/auth"
 
-const FIELDS = [
-  { id: "name", label: "Full Name", placeholder: "e.g. Alex Morgan" },
-  {
-    id: "email",
-    type: "email",
-    label: "Email Address",
-    placeholder: "alex@example.com",
-  },
-  {
-    id: "password",
-    type: "password",
-    label: "Password",
-    placeholder: "At least 6 characters",
-  },
-  {
-    id: "confirmPassword",
-    type: "password",
-    label: "Confirm Password",
-    placeholder: "Re-enter your password",
-  },
-] as const
-
 type FormFields = Omit<RegisterFormData, "role">
 
 export function RegisterForm() {
+  const router = useRouter()
   const [role, setRole] = useState<UserRole>("CUSTOMER")
   const [formData, setFormData] = useState<FormFields>({
     name: "",
@@ -54,13 +34,13 @@ export function RegisterForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-    if (errors[name as keyof RegisterFormData]) {
+    if (errors[name as keyof RegisterFormData])
       setErrors((prev) => ({ ...prev, [name]: undefined }))
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return
     setErrors({})
     setIsSubmitting(true)
 
@@ -74,21 +54,48 @@ export function RegisterForm() {
     }
 
     toast.success(res.message)
+    router.push("/auth/login")
   }
 
-  const renderFields = () =>
-    FIELDS.map((f) => (
+  const fields = (
+    <div className="space-y-4">
       <AuthInput
-        key={f.id}
-        id={f.id}
-        type={"type" in f ? f.type : "text"}
-        label={f.label}
-        placeholder={f.placeholder}
-        value={formData[f.id]}
+        id="name"
+        label="Full Name"
+        placeholder="e.g. Alex Morgan"
+        value={formData.name}
         onChange={handleChange}
-        error={errors[f.id]}
+        error={errors.name}
       />
-    ))
+      <AuthInput
+        id="email"
+        type="email"
+        label="Email Address"
+        placeholder="alex@example.com"
+        value={formData.email}
+        onChange={handleChange}
+        error={errors.email}
+      />
+      <AuthInput
+        id="password"
+        type="password"
+        label="Password"
+        placeholder="At least 6 characters"
+        value={formData.password}
+        onChange={handleChange}
+        error={errors.password}
+      />
+      <AuthInput
+        id="confirmPassword"
+        type="password"
+        label="Confirm Password"
+        placeholder="Re-enter password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        error={errors.confirmPassword}
+      />
+    </div>
+  )
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -102,10 +109,19 @@ export function RegisterForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <RoleToggle role={role} onRoleChange={setRole}>
+        <RoleToggle
+          role={
+            role === "provider"
+              ? "PROVIDER"
+              : role === "user"
+                ? "CUSTOMER"
+                : role
+          }
+          onRoleChange={setRole}
+        >
           <TabPanels>
-            <TabPanel className="space-y-4">{renderFields()}</TabPanel>
-            <TabPanel className="space-y-4">{renderFields()}</TabPanel>
+            <TabPanel className="space-y-4">{fields}</TabPanel>
+            <TabPanel className="space-y-4">{fields}</TabPanel>
           </TabPanels>
         </RoleToggle>
 

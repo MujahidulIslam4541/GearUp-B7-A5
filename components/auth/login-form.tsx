@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -10,6 +11,7 @@ import { loginAction } from "@/app/auth/login/actions"
 import type { LoginFormData } from "@/lib/validations/auth"
 
 export function LoginForm() {
+  const router = useRouter()
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -26,13 +28,13 @@ export function LoginForm() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
-    if (errors[name as keyof LoginFormData]) {
+    if (errors[name as keyof LoginFormData])
       setErrors((prev) => ({ ...prev, [name]: undefined }))
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return
     setErrors({})
     setIsSubmitting(true)
 
@@ -46,6 +48,8 @@ export function LoginForm() {
     }
 
     toast.success(res.message)
+    router.push(res.redirectTo || "/dashboard/user")
+    router.refresh()
   }
 
   return (
@@ -69,7 +73,6 @@ export function LoginForm() {
           onChange={handleChange}
           error={errors.email}
         />
-
         <AuthInput
           id="password"
           type="password"

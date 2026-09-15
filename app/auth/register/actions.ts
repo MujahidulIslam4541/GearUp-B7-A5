@@ -2,18 +2,15 @@
 
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth"
 
+const REGISTER_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`
+
 export interface RegisterActionResult {
   success: boolean
   message: string
   errors?: Partial<Record<keyof RegisterFormData, string>>
-  user?: { name: string; email: string; role: string }
 }
 
-export async function registerAction(
-  data: RegisterFormData
-): Promise<RegisterActionResult> {
-  console.log("Register Action - Submitted Data:", data)
-
+export async function registerAction(data: RegisterFormData): Promise<RegisterActionResult> {
   const result = registerSchema.safeParse(data)
   if (!result.success) {
     const errors: Partial<Record<keyof RegisterFormData, string>> = {}
@@ -21,29 +18,41 @@ export async function registerAction(
       const field = issue.path[0] as keyof RegisterFormData
       if (field && !errors[field]) errors[field] = issue.message
     })
-    return {
-      success: false,
-      message: "Please correct the errors in the form.",
-      errors,
-    }
+    return { success: false, message: "Please correct the errors in the form.", errors }
   }
 
-  // NOTE: Replace this mock implementation with real backend API call
-  // Example:
-  // const res = await fetch(`${process.env.API_URL}/auth/register`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(data),
-  // })
-  // const json = await res.json()
+  const role = result.data.role.toLowerCase() === "provider" ? "provider" : "user"
 
-  return {
-    success: true,
-    message: "Account created successfully! Welcome to GearUp.",
-    user: {
-      name: result.data.name,
-      email: result.data.email,
-      role: result.data.role,
-    },
+  try {
+    const res = await fetch(REGISTER_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: result.data.name,
+        email: result.data.email,
+        password: result.data.password,
+        role,
+      }),
+    })
+    const json = await res.json().catch(() => null)
+
+    console.log("register api response", json)
+
+    if (!res.ok || json?.success === false) {
+      return {
+        success: false,
+        message: json?.message || "Registration failed. Please try again with different details.",
+      }
+    }
+
+    return {
+      success: true,
+      message: json?.message || "Account created successfully! Please sign in to continue.",
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Unable to reach server. Please try again.",
+    }
   }
 }
