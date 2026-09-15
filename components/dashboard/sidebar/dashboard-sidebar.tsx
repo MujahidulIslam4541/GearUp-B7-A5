@@ -14,7 +14,6 @@ import {
   getNavItemsForRole,
 } from "@/lib/constants/dashboard-nav"
 import { SidebarBrand } from "./sidebar-brand"
-import { SidebarUserProfile } from "./sidebar-user-profile"
 import { SidebarNav } from "./sidebar-nav"
 import { SidebarUserFooter } from "./sidebar-user-footer"
 
@@ -28,10 +27,8 @@ export function DashboardSidebar() {
       collapsible="icon"
       className="border-r border-sidebar-border bg-sidebar"
     >
-      <SidebarHeader />
-      <SidebarHeader className="gap-3">
+      <SidebarHeader >
         <SidebarBrand />
-        <SidebarUserProfile />
       </SidebarHeader>
 
       <SidebarSeparator />
