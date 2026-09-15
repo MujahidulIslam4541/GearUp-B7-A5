@@ -14,7 +14,7 @@ import {
   getNavItemsForRole,
 } from "@/lib/constants/dashboard-nav"
 import { SidebarBrand } from "./sidebar-brand"
-import { SidebarRoleBadge } from "./sidebar-role-badge"
+import { SidebarUserProfile } from "./sidebar-user-profile"
 import { SidebarNav } from "./sidebar-nav"
 import { SidebarUserFooter } from "./sidebar-user-footer"
 
@@ -24,10 +24,14 @@ export function DashboardSidebar() {
   const navItems = getNavItemsForRole(currentRole)
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
-      <SidebarHeader>
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-sidebar-border bg-sidebar"
+    >
+      <SidebarHeader />
+      <SidebarHeader className="gap-3">
         <SidebarBrand />
-        <SidebarRoleBadge role={currentRole} />
+        <SidebarUserProfile />
       </SidebarHeader>
 
       <SidebarSeparator />
@@ -46,4 +50,3 @@ export function DashboardSidebar() {
     </Sidebar>
   )
 }
-

@@ -1,10 +1,8 @@
-import Link from "next/link"
-import { Compass } from "lucide-react"
+
 import { SidebarTrigger } from "@/components/animate-ui/components/radix/sidebar"
 import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
 import { DashboardBreadcrumbs } from "./dashboard-breadcrumbs"
-import { RoleSwitcher } from "./role-switcher"
+import { SidebarUserProfile } from "../sidebar/sidebar-user-profile"
 
 export function DashboardHeader() {
   return (
@@ -16,17 +14,7 @@ export function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <Button
-          render={<Link href="/gear" />}
-          variant="ghost"
-          size="sm"
-          className="hidden md:inline-flex h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-        >
-          <Compass className="size-3.5" />
-          <span>Explore Rentals</span>
-        </Button>
-
-        <RoleSwitcher />
+        <SidebarUserProfile />
       </div>
     </header>
   )
