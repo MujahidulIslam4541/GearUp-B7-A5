@@ -8,7 +8,7 @@ This document maps all frontend pages and components to their corresponding back
 
 | Feature / UI Component | Frontend File | Backend Endpoint | Method | Description |
 |---|---|---|---|---|
-| Registration Form | `components/auth/register-form.tsx` | `/api/auth/register` | `POST` | Register Customer/Provider account |
+| Registration Form | `components/auth/register-form.tsx` | `/api/auth/register` | `POST` | Register User/Provider account |
 | Login Form | `components/auth/login-form.tsx` | `/api/auth/login` | `POST` | Authenticate & issue JWT tokens |
 | Navbar Profile & Sidenav | `lib/auth-server.ts`, `components/navbar/nav-auth.tsx` | `/api/auth/me` | `GET` | Retrieve verified session & user profile |
 

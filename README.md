@@ -40,7 +40,6 @@ GearUp is a modern, responsive Next.js web application for a sports and outdoor 
 ## 📁 Key Documentation
 
 - [`API_INTEGRATION.md`](./API_INTEGRATION.md) — Comprehensive mapping between frontend components and backend API endpoints.
-- [`API_COVERAGE.md`](./API_COVERAGE.md) — Complete endpoint coverage audit based on backend Postman collection.
 
 ---
 
