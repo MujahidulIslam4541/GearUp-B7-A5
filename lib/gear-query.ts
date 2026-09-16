@@ -19,7 +19,7 @@ export interface GearQueryResult {
   activeFilterCount: number
 }
 
-export function getFilteredGear(params: GearFilterParams): GearQueryResult {
+export function getFilteredGear(params: GearFilterParams, sourceGears?: GearItem[]): GearQueryResult {
   const { search = "", category = "all", minPrice, maxPrice } = params
   const limit = params.limit || 8
   const requestedPage = Math.max(1, Number(params.page) || 1)
@@ -30,10 +30,13 @@ export function getFilteredGear(params: GearFilterParams): GearQueryResult {
   const max =
     maxPrice !== undefined && maxPrice !== "" ? Number(maxPrice) : null
 
-  const filtered = ALL_GEAR.filter((gear) => {
+  const baseGears = sourceGears && sourceGears.length > 0 ? sourceGears : ALL_GEAR
+
+  const filtered = baseGears.filter((gear) => {
     if (normalizedSearch) {
+      const catName = gear.category?.name || ""
       const haystack =
-        `${gear.name} ${gear.description} ${gear.brand} ${gear.category.name}`.toLowerCase()
+        `${gear.name} ${gear.description} ${gear.brand} ${catName}`.toLowerCase()
       if (!haystack.includes(normalizedSearch)) return false
     }
 
@@ -44,7 +47,7 @@ export function getFilteredGear(params: GearFilterParams): GearQueryResult {
         .map((c) => c.trim())
         .filter(Boolean)
       if (selectedCats.length > 0) {
-        const itemName = gear.category.name.toLowerCase()
+        const itemName = (gear.category?.name || "").toLowerCase()
         if (!selectedCats.includes(itemName)) return false
       }
     }

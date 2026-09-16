@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { getFilteredGear } from "@/lib/gear-query"
+import { GearItem } from "@/types/gear"
 import { GearFilters, GearFilterSidebar } from "@/components/gear/gear-filters"
 import { GearHeader, GearGrid } from "@/components/gear/gear-grid"
 import {
@@ -14,7 +15,11 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination"
 
-export function GearListingContent() {
+export function GearListingContent({
+  initialGears,
+}: {
+  initialGears?: GearItem[]
+}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -83,14 +88,17 @@ export function GearListingContent() {
     updateUrl({ page: p > 1 ? String(p) : null })
   }
 
-  const result = getFilteredGear({
-    search,
-    category,
-    minPrice,
-    maxPrice,
-    page,
-    limit: 8,
-  })
+  const result = getFilteredGear(
+    {
+      search,
+      category,
+      minPrice,
+      maxPrice,
+      page,
+      limit: 8,
+    },
+    initialGears
+  )
 
   return (
     <div className="space-y-8">

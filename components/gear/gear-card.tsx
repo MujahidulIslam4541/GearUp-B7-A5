@@ -1,9 +1,9 @@
-import Image from "next/image"
 import Link from "next/link"
 import { ShieldCheck } from "lucide-react"
 import { GearItem } from "@/types/gear"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { SafeImage } from "@/components/ui/safe-image"
 
 interface GearCardProps {
   gear: GearItem
@@ -15,11 +15,10 @@ export function GearCard({ gear }: GearCardProps) {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
       <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
-        <Image
+        <SafeImage
           src={gear.imageUrl}
           alt={gear.name}
           fill
-          unoptimized
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -28,7 +27,7 @@ export function GearCard({ gear }: GearCardProps) {
             variant="secondary"
             className="bg-background/80 text-xs font-medium capitalize backdrop-blur-md"
           >
-            {gear.category.name}
+            {gear.category?.name || "Gear"}
           </Badge>
         </div>
         <div className="absolute top-3 right-3">
@@ -52,9 +51,11 @@ export function GearCard({ gear }: GearCardProps) {
               Verified
             </span>
           </div>
-          <h3 className="line-clamp-1 font-heading text-base font-semibold text-foreground transition-colors group-hover:text-primary">
-            {gear.name}
-          </h3>
+          <Link href={`/gear/${gear.id}`} className="block">
+            <h3 className="line-clamp-1 font-heading text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+              {gear.name}
+            </h3>
+          </Link>
           <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
             {gear.description}
           </p>
@@ -68,7 +69,7 @@ export function GearCard({ gear }: GearCardProps) {
             </p>
           </div>
           <Button
-            render={<Link href="/gear" />}
+            render={<Link href={`/gear/${gear.id}`} />}
             size="sm"
             disabled={!isAvailable}
             className="font-medium"

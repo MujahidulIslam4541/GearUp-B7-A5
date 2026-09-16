@@ -1,10 +1,17 @@
 import Link from "next/link"
 import { ArrowRight, Flame } from "lucide-react"
+import { getGears } from "@/lib/api"
 import { FEATURED_GEAR } from "@/lib/constants/gear"
 import { GearCard } from "@/components/gear/gear-card"
 import { Button } from "@/components/ui/button"
 
-export function FeaturedGearSection() {
+export async function FeaturedGearSection() {
+  const gearsRes = await getGears()
+  const items =
+    gearsRes.data && gearsRes.data.length > 0
+      ? gearsRes.data.slice(0, 8)
+      : FEATURED_GEAR
+
   return (
     <section className="border-b border-border bg-background py-16 sm:py-24">
       <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-8">
@@ -23,7 +30,7 @@ export function FeaturedGearSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURED_GEAR.map((item) => (
+          {items.map((item) => (
             <GearCard key={item.id} gear={item} />
           ))}
         </div>
