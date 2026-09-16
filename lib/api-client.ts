@@ -5,8 +5,7 @@ import { ApiResponse } from "@/types/api"
 
 const BASE_URL =
   process.env.API_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://gearup-b7-a4.onrender.com/api"
+  process.env.NEXT_PUBLIC_API_URL
 
 export interface FetchApiOptions extends Omit<RequestInit, "headers" | "body"> {
   headers?: Record<string, string>
@@ -32,6 +31,7 @@ export async function fetchApi<T = unknown>(
   const url = `${BASE_URL}${cleanEndpoint}${qs}`
 
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData
+  
   const headers: Record<string, string> = {
     ...(!isFormData && { "Content-Type": "application/json" }),
     ...customHeaders,
