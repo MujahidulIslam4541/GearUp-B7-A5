@@ -45,24 +45,6 @@ export function UserProfileForm({ user }: { user?: ApiMe | null }) {
             className="bg-muted/30"
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="userId">Account ID</Label>
-          <Input
-            id="userId"
-            value={user?.id || ""}
-            readOnly
-            className="bg-muted/30 font-mono text-xs"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="role">Platform Role</Label>
-          <Input
-            id="role"
-            value={user?.role ? user.role.toLowerCase() : "user"}
-            readOnly
-            className="bg-muted/30 capitalize"
-          />
-        </div>
       </div>
 
       <div className="rounded-xl border border-border/70 bg-muted/30 p-4 text-xs text-muted-foreground">
