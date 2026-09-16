@@ -1,21 +1,61 @@
-# Next.js template
+# GearUp - Rent Sports & Outdoor Gear Instantly 🏋️
 
-This is a Next.js template with shadcn/ui.
+GearUp is a modern, responsive Next.js web application for a sports and outdoor equipment rental service. Customers can browse available gear, select rental dates, and complete secure payments via Stripe. Providers manage their gear inventory and fulfill rental orders through an intuitive dashboard. Admins oversee the entire platform through a comprehensive moderation interface.
 
-## Adding components
+---
 
-To add components to your app, run the following command:
+## 🔑 Admin Credentials (For Testing)
+
+- **Email:** `admin@gmail.com`
+- **Password:** `12345678`
+- **Role:** `ADMIN`
+
+### Customer Test Account
+
+- **Email:** `rifat@gmail.com`
+- **Password:** `12345678`
+- **Role:** `USER`
+
+### Provider Test Account
+
+- **Email:** `provider@gmail.com`
+- **Password:** `12345678`
+- **Role:** `PROVIDER`
+
+---
+
+## 🚀 Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript (Strict Mode)
+- **Styling:** Tailwind CSS
+- **Component Library:** ShadCN UI, Radix Primitives
+- **Animations & Sidebar:** Animate UI Radix Sidebar
+- **Authentication:** JWT in HTTP-Only Cookies + jsonwebtoken
+- **Payment Gateway:** Stripe Checkout Integration
+- **Package Manager:** Bun
+
+---
+
+## 📁 Key Documentation
+
+- [`API_INTEGRATION.md`](./API_INTEGRATION.md) — Comprehensive mapping between frontend components and backend API endpoints.
+- [`API_COVERAGE.md`](./API_COVERAGE.md) — Complete endpoint coverage audit based on backend Postman collection.
+
+---
+
+## 🛠️ Getting Started
 
 ```bash
-npx shadcn@latest add button
-```
+# Install dependencies
+bun install
 
-This will place the ui components in the `components` directory.
+# Run development server
+bun dev
 
-## Using components
+# Run TypeScript check
+bun run typecheck
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+# Build for production
+bun run build
 ```

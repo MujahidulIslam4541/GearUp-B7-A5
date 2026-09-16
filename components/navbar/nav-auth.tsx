@@ -1,23 +1,20 @@
-"use client"
-
 import Link from "next/link"
 import { LogIn } from "lucide-react"
+import { AuthUser } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { NavUserMenu } from "@/components/navbar/nav-user-menu"
-import { useAuth } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
 interface NavAuthProps {
+  user?: AuthUser | null
   className?: string
 }
 
-export function NavAuth({ className }: NavAuthProps) {
-  const { isLoggedIn } = useAuth()
-
+export function NavAuth({ user, className }: NavAuthProps) {
   return (
     <div className={cn("items-center", className)}>
-      {isLoggedIn ? (
-        <NavUserMenu />
+      {user && user.name ? (
+        <NavUserMenu user={user} />
       ) : (
         <Button
           render={<Link href="/auth/login" />}

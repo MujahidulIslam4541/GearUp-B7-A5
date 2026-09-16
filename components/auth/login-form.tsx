@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -12,6 +12,8 @@ import type { LoginFormData } from "@/lib/validations/auth"
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectParam = searchParams.get("redirect")
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -48,7 +50,11 @@ export function LoginForm() {
     }
 
     toast.success(res.message)
-    router.push(res.redirectTo || "/dashboard/user")
+    const target =
+      redirectParam && redirectParam.startsWith("/")
+        ? redirectParam
+        : res.redirectTo || "/dashboard/user"
+    router.push(target)
     router.refresh()
   }
 

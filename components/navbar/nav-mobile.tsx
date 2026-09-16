@@ -14,13 +14,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuHighlight,
 } from "@/components/animate-ui/primitives/radix/dropdown-menu"
+import { AuthUser } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
 interface NavMobileProps {
+  user?: AuthUser | null
   className?: string
 }
 
-export function NavMobile({ className }: NavMobileProps) {
+export function NavMobile({ user, className }: NavMobileProps) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
@@ -68,7 +70,7 @@ export function NavMobile({ className }: NavMobileProps) {
 
             <DropdownMenuSeparator className="my-1.5 h-px bg-border" />
 
-            <NavMobileAuth onClose={() => setOpen(false)} />
+            <NavMobileAuth user={user} onClose={() => setOpen(false)} />
           </DropdownMenuHighlight>
         </DropdownMenuContent>
       </DropdownMenu>

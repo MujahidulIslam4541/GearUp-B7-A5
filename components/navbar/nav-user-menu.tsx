@@ -1,8 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { LayoutDashboard, LogOut, User as UserIcon } from "lucide-react"
-import { useAuth } from "@/lib/auth"
+import { AuthUser, getDashboardRouteForRole } from "@/lib/auth"
+import { logoutAction } from "@/app/auth/login/actions"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -14,15 +16,24 @@ import {
   DropdownMenuHighlight,
 } from "@/components/animate-ui/primitives/radix/dropdown-menu"
 
-export function NavUserMenu() {
-  const { user, logout } = useAuth()
-  if (!user) return null
-
-  const initials = user.name
+export function NavUserMenu({ user }: { user: AuthUser }) {
+  const router = useRouter()
+  const name = user.name || "User"
+  const initials = name
     .split(" ")
-    .map((n: string) => n[0])
+    .filter(Boolean)
+    .map((n) => n[0])
     .join("")
+    .slice(0, 2)
     .toUpperCase()
+
+  const handleLogout = async () => {
+    await logoutAction()
+    router.push("/auth/login")
+    router.refresh()
+  }
+
+  const dashboardHref = getDashboardRouteForRole(user.role)
 
   return (
     <DropdownMenu>
@@ -44,24 +55,26 @@ export function NavUserMenu() {
       >
         <DropdownMenuLabel className="px-3 py-2">
           <p className="truncate text-sm font-semibold text-foreground">
-            {user.name}
+            {name}
           </p>
-          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+          <p className="truncate text-xs text-muted-foreground">
+            {user.email || ""}
+          </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="-mx-1.5 my-1 bg-border" />
         <DropdownMenuHighlight className="absolute inset-x-1.5 rounded-lg bg-muted/80">
           <DropdownMenuItem className="cursor-pointer rounded-lg p-0">
             <Link
-              href="/dashboard"
+              href={dashboardHref}
               className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-medium text-foreground"
             >
               <LayoutDashboard className="size-4 text-muted-foreground" />
-              <span>Dashboard</span>
+              <span>Dashboard ({user.role.toLowerCase()})</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="-mx-1.5 my-1 bg-border" />
           <DropdownMenuItem
-            onClick={logout}
+            onClick={handleLogout}
             className="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-sm font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
           >
             <LogOut className="size-4" />
