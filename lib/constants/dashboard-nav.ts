@@ -46,18 +46,18 @@ export const ADMIN_NAV_ITEMS: DashboardNavItem[] = [
 ]
 
 export function getRoleFromPathname(pathname: string): UserRole {
-  if (pathname.startsWith("/dashboard/admin")) return "ADMIN"
-  if (pathname.startsWith("/dashboard/provider")) return "PROVIDER"
-  return "USER"
+  if (pathname.startsWith("/dashboard/admin")) return "admin"
+  if (pathname.startsWith("/dashboard/provider")) return "provider"
+  return "user"
 }
 
 export function getNavItemsForRole(role: UserRole): DashboardNavItem[] {
   switch (role) {
-    case "ADMIN":
+    case "admin":
       return ADMIN_NAV_ITEMS
-    case "PROVIDER":
+    case "provider":
       return PROVIDER_NAV_ITEMS
-    case "USER":
+    case "user":
     default:
       return USER_NAV_ITEMS
   }

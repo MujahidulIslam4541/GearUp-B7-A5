@@ -11,6 +11,7 @@ export interface RegisterActionResult {
 }
 
 export async function registerAction(data: RegisterFormData): Promise<RegisterActionResult> {
+
   const result = registerSchema.safeParse(data)
   if (!result.success) {
     const errors: Partial<Record<keyof RegisterFormData, string>> = {}
@@ -21,7 +22,7 @@ export async function registerAction(data: RegisterFormData): Promise<RegisterAc
     return { success: false, message: "Please correct the errors in the form.", errors }
   }
 
-  const role = result.data.role.toLowerCase() === "provider" ? "provider" : "user"
+  const role = result.data.role
 
   try {
     const res = await fetch(REGISTER_API_URL, {
@@ -35,8 +36,6 @@ export async function registerAction(data: RegisterFormData): Promise<RegisterAc
       }),
     })
     const json = await res.json().catch(() => null)
-
-    console.log("register api response", json)
 
     if (!res.ok || json?.success === false) {
       return {

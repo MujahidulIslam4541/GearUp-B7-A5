@@ -11,7 +11,7 @@ export const metadata = {
 export default async function AdminProvidersPage() {
   const usersRes = await getAdminUsers()
   const providers = (usersRes.data || []).filter(
-    (u) => u.role?.toUpperCase() === "PROVIDER"
+    (u) => u.role?.toLowerCase() === "provider"
   )
 
   return (

@@ -1,4 +1,4 @@
-export type UserRole = "USER" | "PROVIDER" | "ADMIN"
+export type UserRole = "user" | "provider" | "admin"
 
 export type BookingStatus =
   | "PLACED"

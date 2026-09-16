@@ -23,7 +23,7 @@ export default async function AdminDashboardPage() {
 
   const stats = {
     totalUsers: users.length,
-    totalProviders: users.filter((u) => u.role?.toUpperCase() === "PROVIDER")
+    totalProviders: users.filter((u) => u.role?.toLowerCase() === "provider")
       .length,
     totalGears: gears.length,
     totalBookings: rentals.length,

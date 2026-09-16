@@ -16,8 +16,8 @@ export function UserProfileForm({ user }: { user?: ApiMe | null }) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs font-semibold uppercase">
-            {user?.role || "USER"}
+          <Badge variant="outline" className="text-xs font-semibold capitalize">
+            {user?.role ? user.role.toLowerCase() : "user"}
           </Badge>
           <Badge className="border-emerald-200 bg-emerald-500/10 text-xs font-semibold text-emerald-600 uppercase">
             {user?.status || "ACTIVE"}
@@ -58,7 +58,7 @@ export function UserProfileForm({ user }: { user?: ApiMe | null }) {
           <Label htmlFor="role">Platform Role</Label>
           <Input
             id="role"
-            value={user?.role || "USER"}
+            value={user?.role ? user.role.toLowerCase() : "user"}
             readOnly
             className="bg-muted/30 capitalize"
           />

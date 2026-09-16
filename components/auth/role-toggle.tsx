@@ -9,22 +9,22 @@ import {
   Tab,
 } from "@/components/animate-ui/primitives/headless/tabs"
 
+import type { RegisterRole } from "@/lib/validations/auth"
+
 interface RoleToggleProps {
-  role: "CUSTOMER" | "PROVIDER"
-  onRoleChange: (role: "CUSTOMER" | "PROVIDER") => void
+  role: RegisterRole
+  onRoleChange: (role: RegisterRole) => void
   children?: React.ReactNode
 }
 
 export function RoleToggle({ role, onRoleChange, children }: RoleToggleProps) {
-  const selectedIndex = role === "CUSTOMER" ? 0 : 1
+  const selectedIndex = role === "user" ? 0 : 1
 
   return (
     <TabGroup
       selectedIndex={selectedIndex}
       onChange={(index: number) => {
-        const nextRole = index === 0 ? "CUSTOMER" : "PROVIDER"
-        console.log("Selected role:", nextRole)
-        onRoleChange(nextRole)
+        onRoleChange(index === 0 ? "user" : "provider")
       }}
       className="w-full space-y-4"
     >
@@ -42,7 +42,7 @@ export function RoleToggle({ role, onRoleChange, children }: RoleToggleProps) {
                 index={0}
                 className="flex h-9 w-full items-center justify-center rounded-lg text-sm font-medium transition-colors data-selected:font-semibold data-selected:text-foreground"
               >
-                Customer
+                User
               </Tab>
             </TabHighlightItem>
 
