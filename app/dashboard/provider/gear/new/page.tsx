@@ -1,3 +1,4 @@
+import { getCategories } from "@/lib/api"
 import { CreateGearForm } from "@/components/dashboard/provider/create-gear-form"
 
 export const metadata = {
@@ -5,7 +6,10 @@ export const metadata = {
   description: "List new rental equipment on the GearUp marketplace.",
 }
 
-export default function CreateGearPage() {
+export default async function CreateGearPage() {
+  const catRes = await getCategories()
+  const categories = catRes.data || []
+
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
@@ -13,12 +17,12 @@ export default function CreateGearPage() {
           List New Gear
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Enter equipment specifications, rental rate, and inventory availability to start earning.
+          Enter equipment specifications, rental rate, and inventory
+          availability to start earning.
         </p>
       </div>
 
-      <CreateGearForm />
+      <CreateGearForm categories={categories} />
     </div>
   )
 }
-

@@ -1,56 +1,75 @@
-"use client"
-
-import { useState } from "react"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { ApiMe } from "@/types/api"
+import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function UserProfileForm() {
-  const [loading, setLoading] = useState(false)
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      toast.success("Profile saved successfully", {
-        description: "Your contact and rental preferences have been updated.",
-      })
-    }, 600)
-  }
-
+export function UserProfileForm({ user }: { user?: ApiMe | null }) {
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-border bg-card p-6 shadow-xs">
+    <div className="space-y-6 rounded-2xl border border-border bg-card p-6 shadow-xs">
+      <div className="flex items-center justify-between border-b border-border pb-4">
+        <div>
+          <h3 className="font-heading text-lg font-bold text-foreground">
+            Personal Details
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Authenticated GearUp account information
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-xs font-semibold uppercase">
+            {user?.role || "USER"}
+          </Badge>
+          <Badge className="border-emerald-200 bg-emerald-500/10 text-xs font-semibold text-emerald-600 uppercase">
+            {user?.status || "ACTIVE"}
+          </Badge>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
-          <Input id="name" defaultValue="Alex Morgan" required />
+          <Input
+            id="name"
+            value={user?.name || ""}
+            readOnly
+            className="bg-muted/30"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" type="email" defaultValue="alex.morgan@gearup.io" required />
+          <Input
+            id="email"
+            type="email"
+            value={user?.email || ""}
+            readOnly
+            className="bg-muted/30"
+          />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
-          <Input id="phone" type="tel" defaultValue="+880 1812-987654" />
+          <Label htmlFor="userId">Account ID</Label>
+          <Input
+            id="userId"
+            value={user?.id || ""}
+            readOnly
+            className="bg-muted/30 font-mono text-xs"
+          />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="city">City / Region</Label>
-          <Input id="city" defaultValue="Dhaka, Bangladesh" />
-        </div>
-        <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="address">Delivery / Pickup Address</Label>
-          <Input id="address" defaultValue="House 42, Road 9/A, Dhanmondi, Dhaka" />
+          <Label htmlFor="role">Platform Role</Label>
+          <Input
+            id="role"
+            value={user?.role || "USER"}
+            readOnly
+            className="bg-muted/30 capitalize"
+          />
         </div>
       </div>
 
-      <div className="flex justify-end border-t border-border pt-4">
-        <Button type="submit" disabled={loading} className="min-w-32">
-          {loading ? "Saving Changes..." : "Save Profile"}
-        </Button>
+      <div className="rounded-xl border border-border/70 bg-muted/30 p-4 text-xs text-muted-foreground">
+        Note: Profile information is synchronized directly with your GearUp
+        authentication identity. Contact platform administration if email or
+        role updates are needed.
       </div>
-    </form>
+    </div>
   )
 }
-

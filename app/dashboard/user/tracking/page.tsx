@@ -1,3 +1,4 @@
+import { getMyOrders } from "@/lib/api"
 import { TrackingInteractiveView } from "@/components/dashboard/user/tracking-interactive-view"
 
 export const metadata = {
@@ -5,7 +6,10 @@ export const metadata = {
   description: "Live tracking milestones for your reserved and rented gear.",
 }
 
-export default function UserTrackingPage() {
+export default async function UserTrackingPage() {
+  const ordersRes = await getMyOrders()
+  const orders = ordersRes.data || []
+
   return (
     <div className="space-y-6">
       <div>
@@ -13,12 +17,12 @@ export default function UserTrackingPage() {
           Booking Tracking
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Track pickup schedule, security deposit releases, and return status in real-time.
+          Track pickup schedule, security deposit releases, and return status in
+          real-time.
         </p>
       </div>
 
-      <TrackingInteractiveView />
+      <TrackingInteractiveView orders={orders} />
     </div>
   )
 }
-

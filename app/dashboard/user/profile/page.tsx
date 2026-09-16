@@ -1,11 +1,15 @@
+import { getMe } from "@/lib/api"
 import { UserProfileForm } from "@/components/dashboard/user/user-profile-form"
 
 export const metadata = {
   title: "Profile | GearUp",
-  description: "Manage your personal information, address, and rental contact details.",
+  description:
+    "Manage your personal information, address, and rental contact details.",
 }
 
-export default function UserProfilePage() {
+export default async function UserProfilePage() {
+  const meRes = await getMe()
+
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
@@ -13,12 +17,11 @@ export default function UserProfilePage() {
           Account Profile
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Update your contact information, verified identity, and default delivery details.
+          View your authenticated GearUp identity and active account role.
         </p>
       </div>
 
-      <UserProfileForm />
+      <UserProfileForm user={meRes.data} />
     </div>
   )
 }
-

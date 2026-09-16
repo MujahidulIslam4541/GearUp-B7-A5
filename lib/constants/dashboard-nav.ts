@@ -33,7 +33,7 @@ export const PROVIDER_NAV_ITEMS: DashboardNavItem[] = [
   { title: "Dashboard", href: "/dashboard/provider", icon: LayoutDashboard },
   { title: "Create Gear", href: "/dashboard/provider/gear/new", icon: PlusCircle },
   { title: "My Gears", href: "/dashboard/provider/gear", icon: Tent },
-  { title: "Gear Bookings", href: "/dashboard/provider/bookings", icon: ClipboardList, badge: "3" },
+  { title: "Gear Bookings", href: "/dashboard/provider/bookings", icon: ClipboardList },
 ]
 
 export const ADMIN_NAV_ITEMS: DashboardNavItem[] = [
@@ -42,7 +42,7 @@ export const ADMIN_NAV_ITEMS: DashboardNavItem[] = [
   { title: "Providers", href: "/dashboard/admin/providers", icon: Building2 },
   { title: "Gears", href: "/dashboard/admin/gears", icon: PackageCheck },
   { title: "Bookings", href: "/dashboard/admin/bookings", icon: ShoppingBag },
-  { title: "Reviews / Reports", href: "/dashboard/admin/reviews", icon: ShieldAlert, badge: "3" },
+  { title: "Reviews / Reports", href: "/dashboard/admin/reviews", icon: ShieldAlert },
 ]
 
 export function getRoleFromPathname(pathname: string): UserRole {
@@ -62,4 +62,3 @@ export function getNavItemsForRole(role: UserRole): DashboardNavItem[] {
       return USER_NAV_ITEMS
   }
 }
-

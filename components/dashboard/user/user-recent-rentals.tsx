@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-import { MOCK_BOOKINGS } from "@/lib/constants/dashboard-mock-data"
+import { ApiOrder } from "@/types/api"
 import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
@@ -12,33 +13,61 @@ import {
 } from "@/components/dashboard/shared/data-table"
 import { Button } from "@/components/ui/button"
 
-export function UserRecentRentals() {
+export function UserRecentRentals({ orders }: { orders: ApiOrder[] }) {
+  if (orders.length === 0) {
+    return (
+      <EmptyState
+        title="No rental bookings yet"
+        description="Browse available outdoor equipment and submit your first rental reservation."
+        action={
+          <Button render={<Link href="/gear" />} size="sm">
+            Browse Gear
+          </Button>
+        }
+      />
+    )
+  }
+
   return (
     <DataTable>
       <TableHead>
         <tr>
           <TableHeaderCell>Gear</TableHeaderCell>
-          <TableHeaderCell>Provider</TableHeaderCell>
-          <TableHeaderCell>Dates</TableHeaderCell>
+          <TableHeaderCell>Order ID</TableHeaderCell>
+          <TableHeaderCell>Rental Dates</TableHeaderCell>
           <TableHeaderCell>Total</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
           <TableHeaderCell className="text-right">Action</TableHeaderCell>
         </tr>
       </TableHead>
       <TableBody>
-        {MOCK_BOOKINGS.slice(0, 3).map((booking) => (
-          <TableRow key={booking.id}>
+        {orders.slice(0, 5).map((order) => (
+          <TableRow key={order.id}>
             <TableCell>
-              <div className="font-semibold text-foreground">{booking.gearName}</div>
-              <div className="text-xs text-muted-foreground capitalize">{booking.category}</div>
+              <div className="font-semibold text-foreground">
+                {order.gearItem?.name || "Equipment Rental"}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {order.gearItem?.brand || "GearUp"}
+              </div>
             </TableCell>
-            <TableCell className="text-xs">{booking.providerName}</TableCell>
+            <TableCell className="font-mono text-xs text-muted-foreground">
+              {order.id.slice(0, 8)}...
+            </TableCell>
             <TableCell className="text-xs">
-              {booking.startDate} to {booking.endDate}
+              {order.rentalDate
+                ? new Date(order.rentalDate).toLocaleDateString()
+                : "N/A"}{" "}
+              –{" "}
+              {order.returnDate
+                ? new Date(order.returnDate).toLocaleDateString()
+                : "N/A"}
             </TableCell>
-            <TableCell className="font-semibold">৳ {booking.totalAmount}</TableCell>
+            <TableCell className="font-semibold">
+              ৳ {order.totalAmount}
+            </TableCell>
             <TableCell>
-              <StatusBadge status={booking.status} />
+              <StatusBadge status={order.status} />
             </TableCell>
             <TableCell className="text-right">
               <Button
@@ -56,4 +85,3 @@ export function UserRecentRentals() {
     </DataTable>
   )
 }
-

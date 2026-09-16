@@ -13,11 +13,12 @@ import {
   getRoleFromPathname,
   getNavItemsForRole,
 } from "@/lib/constants/dashboard-nav"
+import { AuthUser } from "@/lib/auth"
 import { SidebarBrand } from "./sidebar-brand"
 import { SidebarNav } from "./sidebar-nav"
 import { SidebarUserFooter } from "./sidebar-user-footer"
 
-export function DashboardSidebar() {
+export function DashboardSidebar({ user }: { user?: AuthUser | null }) {
   const pathname = usePathname()
   const currentRole = getRoleFromPathname(pathname)
   const navItems = getNavItemsForRole(currentRole)
@@ -27,7 +28,7 @@ export function DashboardSidebar() {
       collapsible="icon"
       className="border-r border-sidebar-border bg-sidebar"
     >
-      <SidebarHeader >
+      <SidebarHeader>
         <SidebarBrand />
       </SidebarHeader>
 

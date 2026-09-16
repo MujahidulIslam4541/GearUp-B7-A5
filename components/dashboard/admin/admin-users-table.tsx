@@ -1,38 +1,53 @@
 "use client"
 
 import { useState } from "react"
-import { Ban, CheckCircle, Trash2 } from "lucide-react"
 import { toast } from "sonner"
-import { MOCK_USERS } from "@/lib/constants/dashboard-mock-data"
-import { DashboardUser } from "@/types/dashboard"
-import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { updateAdminUserStatus } from "@/lib/api"
+import { ApiAdminUser } from "@/types/api"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
   TableBody,
-  TableRow,
-  TableCell,
   TableHeaderCell,
 } from "@/components/dashboard/shared/data-table"
-import { Button } from "@/components/ui/button"
+import { AdminUserRow } from "./admin-user-row"
 
-export function AdminUsersTable() {
-  const [users, setUsers] = useState<DashboardUser[]>(MOCK_USERS)
+export function AdminUsersTable({
+  initialUsers,
+}: {
+  initialUsers: ApiAdminUser[]
+}) {
+  const [users, setUsers] = useState<ApiAdminUser[]>(initialUsers)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-  const toggleStatus = (id: string, name: string) => {
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id !== id) return u
-        const next = u.status === "ACTIVE" ? "SUSPENDED" : "ACTIVE"
-        toast.info(`User "${name}" status changed to ${next}`)
-        return { ...u, status: next }
-      })
-    )
+  const toggleStatus = async (
+    id: string,
+    name: string,
+    currentStatus: string
+  ) => {
+    const next =
+      currentStatus.toUpperCase() === "ACTIVE" ? "SUSPENDED" : "ACTIVE"
+    setUpdatingId(id)
+    const res = await updateAdminUserStatus(id, next)
+    setUpdatingId(null)
+    if (res.success) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, status: next } : u))
+      )
+      toast.success(`User "${name}" status updated to ${next}`)
+    } else {
+      toast.error(res.message || "Failed to update user status")
+    }
   }
 
-  const handleDelete = (id: string, name: string) => {
-    setUsers((prev) => prev.filter((u) => u.id !== id))
-    toast.success(`User "${name}" removed`)
+  if (users.length === 0) {
+    return (
+      <EmptyState
+        title="No users found"
+        description="Registered member accounts will appear in this directory."
+      />
+    )
   }
 
   return (
@@ -41,48 +56,22 @@ export function AdminUsersTable() {
         <tr>
           <TableHeaderCell>User</TableHeaderCell>
           <TableHeaderCell>Email</TableHeaderCell>
-          <TableHeaderCell>Bookings</TableHeaderCell>
-          <TableHeaderCell>Joined</TableHeaderCell>
+          <TableHeaderCell>Role</TableHeaderCell>
+          <TableHeaderCell>Joined Date</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
-          <TableHeaderCell className="text-right">Actions</TableHeaderCell>
+          <TableHeaderCell className="text-right">Action</TableHeaderCell>
         </tr>
       </TableHead>
       <TableBody>
         {users.map((u) => (
-          <TableRow key={u.id}>
-            <TableCell>
-              <div className="font-semibold">{u.name}</div>
-              <div className="font-mono text-xs text-muted-foreground">{u.id}</div>
-            </TableCell>
-            <TableCell className="text-xs text-muted-foreground">{u.email}</TableCell>
-            <TableCell className="text-xs font-medium">{u.totalBookings}</TableCell>
-            <TableCell className="text-xs">{u.joinedDate}</TableCell>
-            <TableCell><StatusBadge status={u.status} /></TableCell>
-            <TableCell className="text-right">
-              <div className="flex items-center justify-end gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  title={u.status === "ACTIVE" ? "Suspend user" : "Activate user"}
-                  onClick={() => toggleStatus(u.id, u.name)}
-                >
-                  {u.status === "ACTIVE" ? <Ban className="size-3.5 text-amber-500" /> : <CheckCircle className="size-3.5 text-emerald-500" />}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  title="Delete user"
-                  onClick={() => handleDelete(u.id, u.name)}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="size-3.5" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
+          <AdminUserRow
+            key={u.id}
+            user={u}
+            isUpdating={updatingId === u.id}
+            onToggleStatus={toggleStatus}
+          />
         ))}
       </TableBody>
     </DataTable>
   )
 }
-

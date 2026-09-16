@@ -1,70 +1,23 @@
-"use client"
-
-import { useState } from "react"
-import { Check, X } from "lucide-react"
-import { toast } from "sonner"
-import { MOCK_REVIEWS_REPORTS } from "@/lib/constants/dashboard-mock-data"
-import { DashboardReviewReport } from "@/types/dashboard"
-import { StatusBadge } from "@/components/dashboard/shared/status-badge"
-import {
-  DataTable,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableHeaderCell,
-} from "@/components/dashboard/shared/data-table"
-import { Button } from "@/components/ui/button"
+import { AlertCircle } from "lucide-react"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 
 export function AdminReviewsTable() {
-  const [reports, setReports] = useState<DashboardReviewReport[]>(MOCK_REVIEWS_REPORTS)
-
-  const handleAction = (id: string, action: "RESOLVED" | "DISMISSED") => {
-    setReports((prev) => prev.map((r) => (r.id === id ? { ...r, status: action } : r)))
-    toast.success(`Report #${id} marked as ${action.toLowerCase()}`)
-  }
-
   return (
-    <DataTable>
-      <TableHead>
-        <tr>
-          <TableHeaderCell>Report ID</TableHeaderCell>
-          <TableHeaderCell>Target</TableHeaderCell>
-          <TableHeaderCell>Reported By</TableHeaderCell>
-          <TableHeaderCell>Reason</TableHeaderCell>
-          <TableHeaderCell>Status</TableHeaderCell>
-          <TableHeaderCell className="text-right">Moderation</TableHeaderCell>
-        </tr>
-      </TableHead>
-      <TableBody>
-        {reports.map((r) => (
-          <TableRow key={r.id}>
-            <TableCell className="font-mono text-xs font-semibold">{r.id}</TableCell>
-            <TableCell>
-              <div className="font-semibold text-xs text-foreground">{r.targetName}</div>
-              <div className="text-[10px] text-muted-foreground uppercase">{r.targetType}</div>
-            </TableCell>
-            <TableCell className="text-xs">{r.reporterName}</TableCell>
-            <TableCell className="text-xs text-muted-foreground max-w-xs truncate">{r.reason}</TableCell>
-            <TableCell><StatusBadge status={r.status} /></TableCell>
-            <TableCell className="text-right">
-              {r.status === "PENDING" ? (
-                <div className="flex items-center justify-end gap-1.5">
-                  <Button variant="outline" size="xs" className="h-7 text-xs text-emerald-600" onClick={() => handleAction(r.id, "RESOLVED")}>
-                    <Check className="mr-1 size-3" /> Resolve
-                  </Button>
-                  <Button variant="ghost" size="xs" className="h-7 text-xs text-muted-foreground" onClick={() => handleAction(r.id, "DISMISSED")}>
-                    <X className="mr-1 size-3" /> Dismiss
-                  </Button>
-                </div>
-              ) : (
-                <span className="text-xs text-muted-foreground">Action taken</span>
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </DataTable>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-500/10 p-4 text-amber-800 dark:border-amber-900 dark:text-amber-300">
+        <AlertCircle className="size-5 shrink-0" />
+        <div className="text-xs">
+          <p className="font-semibold">Review Moderation Endpoint Pending</p>
+          <p className="mt-0.5 text-muted-foreground">
+            The GearUp backend API does not currently expose administrative
+            dispute resolution or review moderation endpoints.
+          </p>
+        </div>
+      </div>
+      <EmptyState
+        title="No moderation reports pending"
+        description="User disputes and flagged content queues will be displayed here once backend moderation APIs are available."
+      />
+    </div>
   )
 }
-

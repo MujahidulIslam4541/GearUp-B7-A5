@@ -1,36 +1,46 @@
-import { CalendarDays, Activity, CheckCircle2, Clock } from "lucide-react"
+import { CalendarDays, Activity, CheckCircle2, Banknote } from "lucide-react"
 import { StatCard } from "@/components/dashboard/shared/stat-card"
-import { USER_STATS } from "@/lib/constants/dashboard-mock-data"
 
-export function UserStats() {
+interface UserStatsProps {
+  totalBookings: number
+  activeRentals: number
+  completedRentals: number
+  totalSpent: number
+}
+
+export function UserStats({
+  totalBookings,
+  activeRentals,
+  completedRentals,
+  totalSpent,
+}: UserStatsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard
         title="Total Bookings"
-        value={USER_STATS.totalBookings}
+        value={totalBookings}
         description="All-time gear reservations"
         icon={CalendarDays}
       />
       <StatCard
         title="Active Rentals"
-        value={USER_STATS.activeRentals}
-        description="Currently checked out"
+        value={activeRentals}
+        description="Currently reserved or picked up"
         icon={Activity}
-        trend={{ value: "In hand", isPositive: true }}
+        trend={{ value: `${activeRentals} in progress`, isPositive: true }}
       />
       <StatCard
         title="Completed Rentals"
-        value={USER_STATS.completedRentals}
-        description="Returned in good shape"
+        value={completedRentals}
+        description="Returned successfully"
         icon={CheckCircle2}
       />
       <StatCard
-        title="Upcoming Booking"
-        value={USER_STATS.upcomingBooking}
-        description="Next rental start date"
-        icon={Clock}
+        title="Total Amount Spent"
+        value={`৳ ${totalSpent.toLocaleString()}`}
+        description="Paid rental fees"
+        icon={Banknote}
       />
     </div>
   )
 }
-

@@ -2,26 +2,46 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-import { MOCK_BOOKINGS } from "@/lib/constants/dashboard-mock-data"
-import { BookingStatus, DashboardBooking } from "@/types/dashboard"
-import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { updateProviderOrderStatus } from "@/lib/api"
+import { ApiOrder } from "@/types/api"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
   TableBody,
-  TableRow,
-  TableCell,
   TableHeaderCell,
 } from "@/components/dashboard/shared/data-table"
+import { ProviderBookingRow } from "./provider-booking-row"
 
-const STATUS_OPTIONS: BookingStatus[] = ["CONFIRMED", "PAID", "PICKED_UP", "RETURNED", "CANCELLED"]
+export function ProviderBookingsTable({
+  initialOrders,
+}: {
+  initialOrders: ApiOrder[]
+}) {
+  const [orders, setOrders] = useState<ApiOrder[]>(initialOrders)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-export function ProviderBookingsTable() {
-  const [bookings, setBookings] = useState<DashboardBooking[]>(MOCK_BOOKINGS)
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    setUpdatingId(id)
+    const res = await updateProviderOrderStatus(id, newStatus)
+    setUpdatingId(null)
+    if (res.success) {
+      setOrders((prev) =>
+        prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o))
+      )
+      toast.success(`Booking status updated to ${newStatus}`)
+    } else {
+      toast.error(res.message || "Failed to update booking status")
+    }
+  }
 
-  const handleStatusChange = (id: string, newStatus: BookingStatus) => {
-    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b)))
-    toast.success(`Booking #${id} updated to ${newStatus}`)
+  if (orders.length === 0) {
+    return (
+      <EmptyState
+        title="No rental bookings yet"
+        description="Incoming customer bookings for your equipment will appear here."
+      />
+    )
   }
 
   return (
@@ -31,42 +51,24 @@ export function ProviderBookingsTable() {
           <TableHeaderCell>Booking ID</TableHeaderCell>
           <TableHeaderCell>Gear</TableHeaderCell>
           <TableHeaderCell>Customer</TableHeaderCell>
-          <TableHeaderCell>Dates</TableHeaderCell>
-          <TableHeaderCell>Payment</TableHeaderCell>
+          <TableHeaderCell>Rental Period</TableHeaderCell>
+          <TableHeaderCell>Amount</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
-          <TableHeaderCell className="text-right">Update Status</TableHeaderCell>
+          <TableHeaderCell className="text-right">
+            Update Status
+          </TableHeaderCell>
         </tr>
       </TableHead>
       <TableBody>
-        {bookings.map((b) => (
-          <TableRow key={b.id}>
-            <TableCell className="font-mono text-xs font-semibold">{b.id}</TableCell>
-            <TableCell>
-              <div className="font-semibold text-foreground">{b.gearName}</div>
-              <div className="text-xs text-muted-foreground capitalize">{b.category}</div>
-            </TableCell>
-            <TableCell>
-              <div className="text-xs font-medium text-foreground">{b.customerName}</div>
-              <div className="text-[11px] text-muted-foreground">{b.customerEmail}</div>
-            </TableCell>
-            <TableCell className="text-xs">{b.startDate} – {b.endDate} ({b.days}d)</TableCell>
-            <TableCell><StatusBadge status={b.paymentStatus} /></TableCell>
-            <TableCell><StatusBadge status={b.status} /></TableCell>
-            <TableCell className="text-right">
-              <select
-                value={b.status}
-                onChange={(e) => handleStatusChange(b.id, e.target.value as BookingStatus)}
-                className="h-7 rounded-md border border-input bg-background px-2 text-xs font-medium shadow-xs outline-none"
-              >
-                {STATUS_OPTIONS.map((st) => (
-                  <option key={st} value={st}>{st.replace("_", " ")}</option>
-                ))}
-              </select>
-            </TableCell>
-          </TableRow>
+        {orders.map((b) => (
+          <ProviderBookingRow
+            key={b.id}
+            order={b}
+            isUpdating={updatingId === b.id}
+            onStatusChange={handleStatusChange}
+          />
         ))}
       </TableBody>
     </DataTable>
   )
 }
-

@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-import { MOCK_BOOKINGS } from "@/lib/constants/dashboard-mock-data"
+import { ApiOrder } from "@/types/api"
 import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
@@ -12,7 +13,16 @@ import {
 } from "@/components/dashboard/shared/data-table"
 import { Button } from "@/components/ui/button"
 
-export function ProviderRecentBookings() {
+export function ProviderRecentBookings({ orders }: { orders: ApiOrder[] }) {
+  if (orders.length === 0) {
+    return (
+      <EmptyState
+        title="No incoming bookings yet"
+        description="When customers reserve your gear, their bookings and status will appear here."
+      />
+    )
+  }
+
   return (
     <DataTable>
       <TableHead>
@@ -26,24 +36,33 @@ export function ProviderRecentBookings() {
         </tr>
       </TableHead>
       <TableBody>
-        {MOCK_BOOKINGS.slice(0, 3).map((booking) => (
+        {orders.slice(0, 5).map((booking) => (
           <TableRow key={booking.id}>
             <TableCell>
-              <div className="font-semibold text-foreground">{booking.gearName}</div>
-              <div className="text-xs text-muted-foreground">{booking.id}</div>
+              <div className="font-semibold text-foreground">
+                {booking.gearItem?.name || "Gear Item"}
+              </div>
+              <div className="font-mono text-xs text-muted-foreground">
+                {booking.id.slice(0, 8)}
+              </div>
             </TableCell>
             <TableCell>
-              <div className="text-xs font-medium text-foreground">{booking.customerName}</div>
-              <div className="text-[11px] text-muted-foreground">{booking.customerEmail}</div>
+              <div className="text-xs font-medium text-foreground">
+                {booking.customer?.name || "Customer"}
+              </div>
+              <div className="text-[11px] text-muted-foreground">
+                {booking.customer?.email || ""}
+              </div>
             </TableCell>
             <TableCell className="text-xs">
-              {booking.startDate} – {booking.endDate} ({booking.days}d)
+              {booking.rentalDate.slice(0, 10)} –{" "}
+              {booking.returnDate.slice(0, 10)}
             </TableCell>
             <TableCell className="font-semibold text-emerald-600 dark:text-emerald-400">
               ৳ {booking.totalAmount}
             </TableCell>
             <TableCell>
-              <StatusBadge status={booking.status} />
+              <StatusBadge status={booking.status.toUpperCase()} />
             </TableCell>
             <TableCell className="text-right">
               <Button
@@ -61,4 +80,3 @@ export function ProviderRecentBookings() {
     </DataTable>
   )
 }
-

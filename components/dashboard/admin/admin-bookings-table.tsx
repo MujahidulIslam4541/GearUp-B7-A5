@@ -1,7 +1,6 @@
-"use client"
-
-import { MOCK_BOOKINGS } from "@/lib/constants/dashboard-mock-data"
+import { ApiOrder } from "@/types/api"
 import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
@@ -11,7 +10,16 @@ import {
   TableHeaderCell,
 } from "@/components/dashboard/shared/data-table"
 
-export function AdminBookingsTable() {
+export function AdminBookingsTable({ rentals }: { rentals: ApiOrder[] }) {
+  if (rentals.length === 0) {
+    return (
+      <EmptyState
+        title="No platform bookings found"
+        description="Customer equipment rentals will appear in this administrative ledger."
+      />
+    )
+  }
+
   return (
     <DataTable>
       <TableHead>
@@ -19,35 +27,42 @@ export function AdminBookingsTable() {
           <TableHeaderCell>ID</TableHeaderCell>
           <TableHeaderCell>Customer</TableHeaderCell>
           <TableHeaderCell>Gear</TableHeaderCell>
-          <TableHeaderCell>Provider</TableHeaderCell>
           <TableHeaderCell>Rental Dates</TableHeaderCell>
           <TableHeaderCell>Amount</TableHeaderCell>
-          <TableHeaderCell>Payment</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
         </tr>
       </TableHead>
       <TableBody>
-        {MOCK_BOOKINGS.map((booking) => (
+        {rentals.map((booking) => (
           <TableRow key={booking.id}>
-            <TableCell className="font-mono text-xs font-semibold">{booking.id}</TableCell>
-            <TableCell>
-              <div className="text-xs font-semibold text-foreground">{booking.customerName}</div>
-              <div className="text-[11px] text-muted-foreground">{booking.customerEmail}</div>
+            <TableCell className="font-mono text-xs font-semibold">
+              {booking.id.slice(0, 8)}
             </TableCell>
             <TableCell>
-              <div className="text-xs font-medium text-foreground">{booking.gearName}</div>
-              <div className="text-[11px] text-muted-foreground capitalize">{booking.category}</div>
+              <div className="text-xs font-semibold text-foreground">
+                {booking.customer?.name || "Customer"}
+              </div>
+              <div className="text-[11px] text-muted-foreground">
+                {booking.customer?.email || ""}
+              </div>
             </TableCell>
-            <TableCell className="text-xs text-muted-foreground">{booking.providerName}</TableCell>
+            <TableCell>
+              <div className="text-xs font-medium text-foreground">
+                {booking.gearItem?.name || "Gear"}
+              </div>
+              <div className="text-[11px] text-muted-foreground">
+                {booking.gearItem?.brand || ""}
+              </div>
+            </TableCell>
             <TableCell className="text-xs">
-              {booking.startDate} – {booking.endDate}
+              {booking.rentalDate.slice(0, 10)} –{" "}
+              {booking.returnDate.slice(0, 10)}
             </TableCell>
-            <TableCell className="font-semibold text-xs">৳ {booking.totalAmount}</TableCell>
-            <TableCell>
-              <StatusBadge status={booking.paymentStatus} />
+            <TableCell className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              ৳ {booking.totalAmount}
             </TableCell>
             <TableCell>
-              <StatusBadge status={booking.status} />
+              <StatusBadge status={booking.status.toUpperCase()} />
             </TableCell>
           </TableRow>
         ))}
@@ -55,4 +70,3 @@ export function AdminBookingsTable() {
     </DataTable>
   )
 }
-

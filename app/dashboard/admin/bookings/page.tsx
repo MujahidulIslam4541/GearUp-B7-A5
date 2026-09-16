@@ -1,12 +1,17 @@
+import { getAdminRentals } from "@/lib/api"
 import { DashboardSection } from "@/components/dashboard/shared/dashboard-section"
 import { AdminBookingsTable } from "@/components/dashboard/admin/admin-bookings-table"
 
 export const metadata = {
   title: "All Bookings | GearUp Admin",
-  description: "Monitor and audit all rental reservations across providers on GearUp.",
+  description:
+    "Monitor and audit all rental reservations across providers on GearUp.",
 }
 
-export default function AdminBookingsPage() {
+export default async function AdminBookingsPage() {
+  const rentalsRes = await getAdminRentals()
+  const rentals = rentalsRes.data || []
+
   return (
     <div className="space-y-6">
       <div>
@@ -14,7 +19,8 @@ export default function AdminBookingsPage() {
           Platform Bookings
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Complete ledger of rental transactions, escrow statuses, and gear return milestones.
+          Complete ledger of rental transactions, customer orders, and equipment
+          return milestones.
         </p>
       </div>
 
@@ -22,9 +28,8 @@ export default function AdminBookingsPage() {
         title="Transactions & Reservations"
         description="Every order processed across customer accounts and provider equipment."
       >
-        <AdminBookingsTable />
+        <AdminBookingsTable rentals={rentals} />
       </DashboardSection>
     </div>
   )
 }
-

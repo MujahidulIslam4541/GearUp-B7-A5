@@ -1,28 +1,45 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import { Eye, ShieldBan, Trash2 } from "lucide-react"
 import { toast } from "sonner"
-import { ALL_GEAR } from "@/lib/constants/gear"
+import { deleteGear } from "@/lib/api"
 import { GearItem } from "@/types/gear"
-import { StatusBadge } from "@/components/dashboard/shared/status-badge"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
   TableBody,
-  TableRow,
-  TableCell,
   TableHeaderCell,
 } from "@/components/dashboard/shared/data-table"
-import { Button } from "@/components/ui/button"
+import { AdminGearRow } from "./admin-gear-row"
 
-export function AdminGearsTable() {
-  const [gears, setGears] = useState<GearItem[]>(ALL_GEAR.slice(0, 8))
+export function AdminGearsTable({
+  initialGears,
+}: {
+  initialGears: GearItem[]
+}) {
+  const [gears, setGears] = useState<GearItem[]>(initialGears)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
-  const handleDelete = (id: string, name: string) => {
-    setGears((prev) => prev.filter((g) => g.id !== id))
-    toast.success(`Gear "${name}" removed from marketplace`)
+  const handleDelete = async (id: string, name: string) => {
+    setDeletingId(id)
+    const res = await deleteGear(id)
+    setDeletingId(null)
+    if (res.success) {
+      setGears((prev) => prev.filter((g) => g.id !== id))
+      toast.success(`Gear "${name}" removed from marketplace`)
+    } else {
+      toast.error(res.message || "Failed to remove gear")
+    }
+  }
+
+  if (gears.length === 0) {
+    return (
+      <EmptyState
+        title="No equipment in catalog"
+        description="When providers list rental gear, items will appear here."
+      />
+    )
   }
 
   return (
@@ -30,51 +47,24 @@ export function AdminGearsTable() {
       <TableHead>
         <tr>
           <TableHeaderCell>Gear Name</TableHeaderCell>
-          <TableHeaderCell>Provider</TableHeaderCell>
+          <TableHeaderCell>Brand</TableHeaderCell>
           <TableHeaderCell>Category</TableHeaderCell>
           <TableHeaderCell>Price/Day</TableHeaderCell>
-          <TableHeaderCell>Availability</TableHeaderCell>
+          <TableHeaderCell>In Stock</TableHeaderCell>
           <TableHeaderCell>Status</TableHeaderCell>
           <TableHeaderCell className="text-right">Actions</TableHeaderCell>
         </tr>
       </TableHead>
       <TableBody>
         {gears.map((g) => (
-          <TableRow key={g.id}>
-            <TableCell>
-              <div className="font-semibold text-foreground">{g.name}</div>
-              <div className="text-xs text-muted-foreground">{g.brand}</div>
-            </TableCell>
-            <TableCell className="text-xs">{g.provider.name}</TableCell>
-            <TableCell className="capitalize text-xs">{g.category.name}</TableCell>
-            <TableCell className="font-semibold">৳ {g.price}</TableCell>
-            <TableCell className="text-xs font-medium">
-              {g.quantity > 0 ? `${g.quantity} in stock` : "Out of stock"}
-            </TableCell>
-            <TableCell><StatusBadge status={g.quantity > 0 ? "ACTIVE" : "PENDING"} /></TableCell>
-            <TableCell className="text-right">
-              <div className="flex items-center justify-end gap-1">
-                <Button render={<Link href="/gear" />} variant="ghost" size="icon-xs" title="View gear">
-                  <Eye className="size-3.5" />
-                </Button>
-                <Button variant="ghost" size="icon-xs" title="Delist / Flag" onClick={() => toast.info(`Listing "${g.name}" flagged`)}>
-                  <ShieldBan className="size-3.5 text-amber-500" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  title="Remove gear"
-                  onClick={() => handleDelete(g.id, g.name)}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="size-3.5" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
+          <AdminGearRow
+            key={g.id}
+            gear={g}
+            isDeleting={deletingId === g.id}
+            onDelete={handleDelete}
+          />
         ))}
       </TableBody>
     </DataTable>
   )
 }
-

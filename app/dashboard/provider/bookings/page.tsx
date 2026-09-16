@@ -1,12 +1,17 @@
+import { getProviderOrders } from "@/lib/api"
 import { DashboardSection } from "@/components/dashboard/shared/dashboard-section"
 import { ProviderBookingsTable } from "@/components/dashboard/provider/provider-bookings-table"
 
 export const metadata = {
   title: "Gear Bookings | GearUp Provider",
-  description: "Customer bookings received for your equipment with tracking controls.",
+  description:
+    "Customer bookings received for your equipment with tracking controls.",
 }
 
-export default function ProviderBookingsPage() {
+export default async function ProviderBookingsPage() {
+  const ordersRes = await getProviderOrders()
+  const orders = ordersRes.data || []
+
   return (
     <div className="space-y-6">
       <div>
@@ -14,17 +19,17 @@ export default function ProviderBookingsPage() {
           Gear Bookings
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Manage rental reservations, approve pickups, and verify equipment returns.
+          Manage rental reservations, approve pickups, and verify equipment
+          returns.
         </p>
       </div>
 
       <DashboardSection
         title="Reservations & Orders"
-        description="Select a status to simulate order state transitions in real-time."
+        description="View and update order fulfillment lifecycle in real-time."
       >
-        <ProviderBookingsTable />
+        <ProviderBookingsTable initialOrders={orders} />
       </DashboardSection>
     </div>
   )
 }
-

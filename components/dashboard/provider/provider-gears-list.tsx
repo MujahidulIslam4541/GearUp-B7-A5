@@ -2,27 +2,54 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Eye, Pencil, Trash2 } from "lucide-react"
 import { toast } from "sonner"
-import { PROVIDER_GEARS } from "@/lib/constants/dashboard-mock-data"
+import { deleteGear } from "@/lib/api"
 import { GearItem } from "@/types/gear"
+import { EmptyState } from "@/components/dashboard/shared/empty-state"
 import {
   DataTable,
   TableHead,
   TableBody,
-  TableRow,
-  TableCell,
   TableHeaderCell,
 } from "@/components/dashboard/shared/data-table"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { ProviderGearRow } from "./provider-gear-row"
 
-export function ProviderGearsList() {
-  const [gears, setGears] = useState<GearItem[]>(PROVIDER_GEARS)
+export function ProviderGearsList({
+  initialGears,
+}: {
+  initialGears: GearItem[]
+}) {
+  const [gears, setGears] = useState<GearItem[]>(initialGears)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
-  const handleDelete = (id: string, name: string) => {
-    setGears((prev) => prev.filter((g) => g.id !== id))
-    toast.success(`Removed "${name}" from inventory`)
+  const handleDelete = async (id: string, name: string) => {
+    setDeletingId(id)
+    const res = await deleteGear(id)
+    setDeletingId(null)
+    if (res.success) {
+      setGears((prev) => prev.filter((g) => g.id !== id))
+      toast.success(`Removed "${name}" from inventory`)
+    } else {
+      toast.error(res.message || "Failed to delete gear")
+    }
+  }
+
+  if (gears.length === 0) {
+    return (
+      <EmptyState
+        title="No equipment listed yet"
+        description="Add your gear to start offering rentals to customers on GearUp."
+        action={
+          <Button
+            render={<Link href="/dashboard/provider/gear/new" />}
+            size="sm"
+          >
+            List First Gear
+          </Button>
+        }
+      />
+    )
   }
 
   return (
@@ -39,39 +66,14 @@ export function ProviderGearsList() {
       </TableHead>
       <TableBody>
         {gears.map((g) => (
-          <TableRow key={g.id}>
-            <TableCell><span className="font-semibold">{g.name}</span></TableCell>
-            <TableCell className="capitalize text-xs">{g.category.name}</TableCell>
-            <TableCell className="text-xs">{g.brand}</TableCell>
-            <TableCell className="font-semibold">৳ {g.price}</TableCell>
-            <TableCell>
-              <Badge variant={g.quantity > 0 ? "default" : "destructive"}>
-                {g.quantity} units
-              </Badge>
-            </TableCell>
-            <TableCell className="text-right">
-              <div className="flex items-center justify-end gap-1.5">
-                <Button render={<Link href="/gear" />} variant="ghost" size="icon-xs" title="View Listing">
-                  <Eye className="size-3.5" />
-                </Button>
-                <Button variant="ghost" size="icon-xs" title="Edit Gear" onClick={() => toast.info(`Editing "${g.name}"`)}>
-                  <Pencil className="size-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  title="Delete Gear"
-                  onClick={() => handleDelete(g.id, g.name)}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="size-3.5" />
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
+          <ProviderGearRow
+            key={g.id}
+            gear={g}
+            isDeleting={deletingId === g.id}
+            onDelete={handleDelete}
+          />
         ))}
       </TableBody>
     </DataTable>
   )
 }
-
